@@ -1,6 +1,5 @@
 package com.edu.uce.pw.api.controller;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,18 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edu.uce.pw.api.repository.modelo.Estudiante;
 import com.edu.uce.pw.api.service.IEstudianteService;
 
-
 @RestController
 @RequestMapping(path = "/estudiantes")
 public class EstudianteController {
 
-	//Se inyecta la capa Service
+	// Se inyecta la capa Service
 	@Autowired
 	private IEstudianteService estudianteService;
 
-
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
-	//Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
+	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes
 	@PostMapping
 	public void guardar(@RequestBody Estudiante est) {
 //		Estudiante est= new Estudiante();
@@ -41,8 +38,8 @@ public class EstudianteController {
 
 	}
 
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizar
-	//Nivel 1:http://localhost:8080/API/v1.0/Matricula/estudiantes/2
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizar
+	// Nivel 1:http://localhost:8080/API/v1.0/Matricula/estudiantes/2
 	@PutMapping(path = "/{id}")
 	public void actualizar(@RequestBody Estudiante est, @PathVariable Integer id) {
 //		Estudiante est=this.estudianteService.buscar(1);
@@ -53,63 +50,68 @@ public class EstudianteController {
 		this.estudianteService.actualizar(est);
 
 	}
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizarParcial
-	//Nivel 1:http://localhost:8080/API/v1.0/Matricula/estudiantes/2
+
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizarParcial
+	// Nivel 1:http://localhost:8080/API/v1.0/Matricula/estudiantes/2
 	@PatchMapping(path = "/{id}")
-	public void actualizarParcial(@RequestBody Estudiante est, @PathVariable Integer id){
+	public void actualizarParcial(@RequestBody Estudiante est, @PathVariable Integer id) {
 		est.setId(id);
-		Estudiante est2=this.estudianteService.buscar(est.getId());
-		if(est.getNombre()!=null) {
+		Estudiante est2 = this.estudianteService.buscar(est.getId());
+		if (est.getNombre() != null) {
 			est2.setNombre(est.getNombre());
 		}
-		if(est.getApellido()!=null) {
+		if (est.getApellido() != null) {
 			est2.setApellido(est.getApellido());
 		}
-		if(est.getFechaNacimiento()!=null) {
+		if (est.getFechaNacimiento() != null) {
 			est2.setFechaNacimiento(est.getFechaNacimiento());
 		}
-		
+
 		this.estudianteService.actualizar(est2);
 	}
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/borrar
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/borrar/1
-	//Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/2
+
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/borrar
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/borrar/1
+	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/2
 	@DeleteMapping(path = "/{id}")
 	public void borrar(@PathVariable Integer id) {
-		
+
 		System.out.println("Borrar");
 		this.estudianteService.borrar(id);
 
 	}
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/1/nuevo/prueba
-	//Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/1
+
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/1/nuevo/prueba
+	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/1
 	@GetMapping(path = "/{id}")
-	public Estudiante buscar(@PathVariable Integer id) {
+	public Estudiante buscarPorId(@PathVariable Integer id) {
 		return this.estudianteService.buscar(id);
 	}
-	
-	
-	
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/buscarPorGenero?genero=F&edad=35
-	@GetMapping(path="/buscarPorGenero")
-	public List<Estudiante> buscarPorGenero(@RequestParam String genero, @RequestParam Integer edad){
-		System.out.println("Edad: "+edad);
-		List<Estudiante> lista=this.estudianteService.buscarPorGenero(genero);
+
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscarPorGenero?genero=F&edad=35
+	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/genero?genero=F
+	@GetMapping(path = "/genero")
+	public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
+		List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
 		return lista;
-		
+
+	}
+
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscarMixto/2?prueba=HolaMundo
+	//Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/mixto/2?prueba=HolaMundo
+	@GetMapping(path = "/mixto/{id}")
+	public Estudiante buscarMixto(@PathVariable Integer id, @RequestParam String prueba) {
+		System.out.println("ID:" + id);
+		System.out.println("Prueba:" + prueba);
+		return this.estudianteService.buscar(id);
+
 	}
 	
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/buscarMixto/2?prueba=HolaMundo
-		@GetMapping(path = "/buscarMixto/{id}")
-		public Estudiante buscarMixto(@PathVariable Integer id, @RequestParam String prueba) {
-			System.out.println("ID:" +id);
-			System.out.println("Prueba:" +prueba);
-			return this.estudianteService.buscar(id);
-			
-		}
-	
-	
-	
-
+	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/test/1
+	@GetMapping(path = "/test/{id}")
+	public Estudiante test(@PathVariable Integer id,@RequestBody Estudiante est) {
+		System.out.println(est);
+		return this.estudianteService.buscar(id);
+	}
 
 }
