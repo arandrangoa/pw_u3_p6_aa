@@ -1,5 +1,7 @@
 package com.edu.uce.pw.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.uce.pw.api.repository.modelo.Estudiante;
@@ -22,21 +25,23 @@ public class MateriaController {
 	@Autowired
 	private IMateriaService iMateriaService;
 
-	//http://localhost:8080/API/v1.0/Matricula/materias/guardar
-	@PostMapping(path = "/guardar")
+	//http://localhost:8080/API/v1.0/Matricula/materias
+	@PostMapping()
 	public void guardar(@RequestBody Materia mat) {
 		this.iMateriaService.guardar(mat);
 	}
 	
 	//http://localhost:8080/API/v1.0/Matricula/materias/actualizar
-	@PutMapping(path = "/actualizar")
-	public void actualizar(@RequestBody Materia mat) {
+	@PutMapping(path = "/{id}")
+	public void actualizar(@RequestBody Materia mat, @PathVariable Integer id) {
+		mat.setId(id);
 		this.iMateriaService.actualizar(mat);
 	}
 	
 	//http://localhost:8080/API/v1.0/Matricula/materias/actualizar/parcial
-	@PatchMapping(path = "/actualizar/parcial")
-	public void actualizarParcial(@RequestBody Materia mat) {
+	@PatchMapping(path = "/{id}")
+	public void actualizarParcial(@RequestBody Materia mat, @PathVariable Integer id) {
+		mat.setId(id);
 		Materia mat2=this.iMateriaService.buscar(mat.getId());
 		if(mat.getNombreMateria()!=null) {
 			mat2.setNombreMateria(mat.getNombreMateria());
@@ -56,16 +61,17 @@ public class MateriaController {
 	}
 	
 	//http://localhost:8080/API/v1.0/Matricula/materias/borrar
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	public void borrar(@PathVariable Integer id) {
 		this.iMateriaService.borrar(id);
 		
 	}
 	
-	@GetMapping(path = "/buscar/{id}/nuevo")
-	public Materia buscar(@PathVariable Integer id) {
+	@GetMapping(path = "/{id}")
+	public Materia buscarPorId(@PathVariable Integer id) {
 		return this.iMateriaService.buscar(id);
 	}
+	
 	
 	
 }
