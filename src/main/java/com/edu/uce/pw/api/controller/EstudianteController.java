@@ -25,28 +25,33 @@ import com.edu.uce.pw.api.service.IEstudianteService;
 @RestController
 @RequestMapping(path = "/estudiantes")
 public class EstudianteController {
-
+ 
 	// Se inyecta la capa Service
 	@Autowired
 	private IEstudianteService estudianteService;
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes
-	@PostMapping(produces="application/xml", consumes="application/xml")
+	@PostMapping(produces = "application/json", consumes = "application/xml")
 	public ResponseEntity<Estudiante> guardar(@RequestBody Estudiante est) {
+		
+		
+		HttpHeaders cabeceraPost= new HttpHeaders();
+		cabeceraPost.add("mensaje_201", "Corresponde a la inserción de un recurso");
+		cabeceraPost.add("valor", "Estudiante insertado con éxito");
+		
 //		Estudiante est= new Estudiante();
 //		est.setNombre("Alex");
 //		est.setApellido("Andrango");
 //		est.setFechaNacimiento(LocalDateTime.of(1999,11,21,1,1));
 		this.estudianteService.guardar(est);
-		//return ResponseEntity.status(238).body(est);
-		return ResponseEntity.status(HttpStatus.CREATED).body(est);
-
+		return ResponseEntity.status(201).body(est);
+ 
 	}
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizar
 	// Nivel 1:http://localhost:8080/API/v1.0/Matricula/estudiantes/2
-	@PutMapping(path = "/{id}", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
+	@PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<Estudiante> actualizar(@RequestBody Estudiante est, @PathVariable Integer id) {
 //		Estudiante est=this.estudianteService.buscar(1);
 //		est.setNombre("Ronaldo");
@@ -54,13 +59,18 @@ public class EstudianteController {
 //		est.setFechaNacimiento(LocalDateTime.of(1997,21,11,1,1));
 		est.setId(id);
 		this.estudianteService.actualizar(est);
-		return ResponseEntity.status(238).body(est);
-
+		
+		HttpHeaders cabeceraPut= new HttpHeaders();
+		cabeceraPut.add("mensaje_238", "Corresponde a la actualización de un recurso");
+		cabeceraPut.add("valor", "Estudiante actualizado");
+		return new ResponseEntity<>(est,cabeceraPut,238);
+		
+ 
 	}
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizarParcial
 	// Nivel 1:http://localhost:8080/API/v1.0/Matricula/estudiantes/2
-	@PatchMapping(path = "/{id}")
+	@PatchMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<Estudiante> actualizarParcial(@RequestBody Estudiante est, @PathVariable Integer id) {
 		est.setId(id);
 		Estudiante est2 = this.estudianteService.buscar(est.getId());
@@ -73,24 +83,28 @@ public class EstudianteController {
 		if (est.getFechaNacimiento() != null) {
 			est2.setFechaNacimiento(est.getFechaNacimiento());
 		}
-
+ 
 		this.estudianteService.actualizar(est2);
 		return ResponseEntity.status(239).body(est2);
 	}
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/borrar
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/borrar/1
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/2
-	@DeleteMapping(path = "/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> borrar(@PathVariable Integer id) {
-
+ 
 		System.out.println("Borrar");
 		this.estudianteService.borrar(id);
-
-		return ResponseEntity.status(240).body("Borrado");
-
+ 
+			
+		HttpHeaders cabeceraDelete= new  HttpHeaders();
+		cabeceraDelete.add("mensaje_240", "Corresponde a la eliminación del recurso");
+		cabeceraDelete.add("valor", "Estudiante eliminado");
+		return new ResponseEntity<>("Eliminado correctamente",cabeceraDelete,240);
+ 
 	}
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/1/nuevo/prueba
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/1
 	@GetMapping(path = "/{id}",produces="application/xml")
@@ -101,16 +115,23 @@ public class EstudianteController {
 		cabeceras.add("valor", "Estudiante encontrado");
 		return new ResponseEntity<>(this.estudianteService.buscar(id), cabeceras, 236);
 	}
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscarPorGenero?genero=F&edad=35
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/genero?genero=F
 	@GetMapping(path = "/genero")
 	public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
 		List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
 		return lista;
+ 
+	}
+	
+	@GetMapping(path = "/texto/plano")
+	public String prueba() {
+		String prueba = "Texto de prueba";
+		return prueba;
 
 	}
-
+ 
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscarMixto/2?prueba=HolaMundo
 	// Nivel 1:
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/mixto/2?prueba=HolaMundo
@@ -119,22 +140,14 @@ public class EstudianteController {
 		System.out.println("ID:" + id);
 		System.out.println("Prueba:" + prueba);
 		return this.estudianteService.buscar(id);
-
+ 
 	}
-
+ 
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/test/1
 	@GetMapping(path = "/test/{id}")
 	public Estudiante test(@PathVariable Integer id, @RequestBody Estudiante est) {
 		System.out.println(est);
 		return this.estudianteService.buscar(id);
 	}
-	
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/texto/plano
-	@GetMapping(path = "/texto/plano")
-	public String prueba() {
-		String prueba="Texto de prueba";
-		return prueba;
-		
-	}
-
+ 
 }
