@@ -39,6 +39,7 @@ public class EstudianteController {
 //		est.setApellido("Andrango");
 //		est.setFechaNacimiento(LocalDateTime.of(1999,11,21,1,1));
 		this.estudianteService.guardar(est);
+		//return ResponseEntity.status(238).body(est);
 		return ResponseEntity.status(HttpStatus.CREATED).body(est);
 
 	}

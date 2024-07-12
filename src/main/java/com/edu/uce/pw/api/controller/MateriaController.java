@@ -3,6 +3,7 @@ package com.edu.uce.pw.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,20 +28,22 @@ public class MateriaController {
 
 	//http://localhost:8080/API/v1.0/Matricula/materias
 	@PostMapping()
-	public void guardar(@RequestBody Materia mat) {
+	public ResponseEntity<Materia> guardar(@RequestBody Materia mat) {
 		this.iMateriaService.guardar(mat);
+		return ResponseEntity.status(201).body(mat);
 	}
 	
 	//http://localhost:8080/API/v1.0/Matricula/materias/actualizar
 	@PutMapping(path = "/{id}")
-	public void actualizar(@RequestBody Materia mat, @PathVariable Integer id) {
+	public ResponseEntity<Materia> actualizar(@RequestBody Materia mat, @PathVariable Integer id) {
 		mat.setId(id);
 		this.iMateriaService.actualizar(mat);
+		return ResponseEntity.status(238).body(mat);
 	}
 	
 	//http://localhost:8080/API/v1.0/Matricula/materias/actualizar/parcial
 	@PatchMapping(path = "/{id}")
-	public void actualizarParcial(@RequestBody Materia mat, @PathVariable Integer id) {
+	public ResponseEntity<Materia> actualizarParcial(@RequestBody Materia mat, @PathVariable Integer id) {
 		mat.setId(id);
 		Materia mat2=this.iMateriaService.buscar(mat.getId());
 		if(mat.getNombreMateria()!=null) {
@@ -57,19 +60,21 @@ public class MateriaController {
 		}
 		
 		this.iMateriaService.actualizar(mat2);
+		return ResponseEntity.status(239).body(mat2);
 		
 	}
 	
 	//http://localhost:8080/API/v1.0/Matricula/materias/borrar
 	@DeleteMapping(path = "/{id}")
-	public void borrar(@PathVariable Integer id) {
+	public ResponseEntity<String> borrar(@PathVariable Integer id) {
 		this.iMateriaService.borrar(id);
+		return ResponseEntity.status(240).body("Borrado");
 		
 	}
 	
 	@GetMapping(path = "/{id}")
-	public Materia buscarPorId(@PathVariable Integer id) {
-		return this.iMateriaService.buscar(id);
+	public ResponseEntity<Materia> buscarPorId(@PathVariable Integer id) {
+		return ResponseEntity.status(236).body(this.iMateriaService.buscar(id));
 	}
 	
 	
