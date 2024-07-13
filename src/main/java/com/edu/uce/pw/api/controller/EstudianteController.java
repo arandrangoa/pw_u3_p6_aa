@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.uce.pw.api.repository.modelo.Estudiante;
 import com.edu.uce.pw.api.service.IEstudianteService;
+import com.edu.uce.pw.api.service.IMateriaService;
+import com.edu.uce.pw.api.service.to.EstudianteTO;
+import com.edu.uce.pw.api.service.to.MateriaTO;
 
 @RestController
 @RequestMapping(path = "/estudiantes")
@@ -29,6 +32,9 @@ public class EstudianteController {
 	// Se inyecta la capa Service
 	@Autowired
 	private IEstudianteService estudianteService;
+	
+	@Autowired
+	private IMateriaService iMateriaService;
  
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes
@@ -148,6 +154,14 @@ public class EstudianteController {
 	public Estudiante test(@PathVariable Integer id, @RequestBody Estudiante est) {
 		System.out.println(est);
 		return this.estudianteService.buscar(id);
+	}
+	
+	@GetMapping(path = "/hateoas/{id}")
+	public EstudianteTO buscarHateoas(@PathVariable Integer id) {
+		EstudianteTO est = this.estudianteService.buscarPorId(id);
+		List<MateriaTO> lista = this.iMateriaService.buscarPorIdEstudiante(id);
+		est.setMaterias(lista);
+		return est;
 	}
  
 }

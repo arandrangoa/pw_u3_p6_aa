@@ -1,40 +1,21 @@
-package com.edu.uce.pw.api.repository.modelo;
+package com.edu.uce.pw.api.service.to;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name="estudiant")
-public class Estudiante {
+public class EstudianteTO implements Serializable{
 	
-	@Id
-	@GeneratedValue(generator ="seq_estudiante",strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name="seq_estudiante", sequenceName ="seq_estudiante",allocationSize = 1)
-	@Column(name="estu_id")
+	
+	private static final long serialVersionUID = 7085562941894409723L;
+	
 	private Integer id;
-	@Column(name="estu_nombre")
 	private String nombre;
-	@Column(name="estu_apellido")
 	private String apellido;
-	@Column(name="estu_fechaNacimiento")
 	private LocalDateTime fechaNacimiento;
-	@Column(name="estu_genero")
 	private String genero;
 	
-	@OneToMany(mappedBy = "estudiante")
-	private List<Materia> materias;
-	
-
-	
+	private List<MateriaTO> materias;
 	
 	//SET Y GET
 	public Integer getId() {
@@ -67,15 +48,18 @@ public class Estudiante {
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-	public List<Materia> getMaterias() {
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public List<MateriaTO> getMaterias() {
 		return materias;
 	}
-	public void setMaterias(List<Materia> materias) {
+	public void setMaterias(List<MateriaTO> materias) {
 		this.materias = materias;
 	}
 	
 	
-	
-	
 
+	
+	
 }
