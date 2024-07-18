@@ -13,6 +13,8 @@ public interface IEstudianteRepository {
 	 void insertar(Estudiante estudiante);
 	 
 	 List<Estudiante> buscarPorGenero(String genero);
+	 
+	 List<Estudiante> seleccionarTodosEstudiante();
 	
 
 }

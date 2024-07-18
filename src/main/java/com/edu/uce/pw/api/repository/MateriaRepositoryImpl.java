@@ -52,7 +52,7 @@ public class MateriaRepositoryImpl implements IMateriaRepository {
 				.createQuery("SELECT m FROM Materia m WHERE m.estudiante.id= :id",Materia.class);
 		myQuery.setParameter("id", id);
 		myQuery.getResultList();
-		return null;
+		return myQuery.getResultList();
 	}
 
 }

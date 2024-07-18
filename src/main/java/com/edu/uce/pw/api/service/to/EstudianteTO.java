@@ -1,10 +1,12 @@
 package com.edu.uce.pw.api.service.to;
 
+import org.hibernate.boot.jaxb.hbm.internal.RepresentationModeConverter;
+import org.springframework.hateoas.RepresentationModel;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EstudianteTO implements Serializable{
+public class EstudianteTO extends RepresentationModel implements Serializable{
 	
 	
 	private static final long serialVersionUID = 7085562941894409723L;
@@ -15,7 +17,6 @@ public class EstudianteTO implements Serializable{
 	private LocalDateTime fechaNacimiento;
 	private String genero;
 	
-	private List<MateriaTO> materias;
 	
 	//SET Y GET
 	public Integer getId() {
@@ -51,12 +52,7 @@ public class EstudianteTO implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public List<MateriaTO> getMaterias() {
-		return materias;
-	}
-	public void setMaterias(List<MateriaTO> materias) {
-		this.materias = materias;
-	}
+
 	
 	
 
